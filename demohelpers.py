@@ -3,7 +3,7 @@ import matplotlib.patheffects as pe
 import numpy as np
 np.random.seed(0)
 import pandas as pd
-import sklearn
+from sklearn.model_selection import train_test_split
 
 plt.style.use('https://raw.githubusercontent.com/RobGeada/stylelibs/main/material_rh.mplstyle')
 
@@ -85,7 +85,7 @@ def get_loan_data():
     credit = pd.read_csv("data/credit_record.csv")
 
     data = app.merge(credit, on="ID")
-    data = data[:10000]
+    data = data[:30000]
     data['Male?'] = data["CODE_GENDER"].apply(lambda x: 1 if x == "M" else 0)
     data['Own Car?'] = data["FLAG_OWN_CAR"].apply(lambda x: 1 if x == "Y" else 0)
     data['Own Realty?'] = data["FLAG_OWN_REALTY"].apply(lambda x: 1 if x == "Y" else 0)
@@ -111,6 +111,7 @@ def get_loan_data():
 
     data = data.loc[[i for i in list(debts)+list(nodebts)]]
 
-    X,y  = data[[x for x in list(data) if x !="Default?"]], data["Default?"]
-    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, train_size=.90)
-    return  X_train, X_test, y_train, y_test
+    data = data.reset_index(drop=True)
+    #X,y  = data[[x for x in list(data) if x !="Default?"]], data["Default?"]
+
+    return data
